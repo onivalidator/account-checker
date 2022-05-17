@@ -45,7 +45,6 @@ export class Chains {
   async init() {
     const directory = CosmosDirectory();
     let chains = await directory.getChains();
-    console.log(this.enabled);
     chains = Object.values(chains).filter((c) => this.enabled.includes(c.name));
     this.chains = await mapAsync(chains, async (c) => {
       const chainData = await directory.getChainData(c.name);
@@ -56,6 +55,31 @@ export class Chains {
       };
     });
   }
+}
+
+export class Validator {
+  constructor(chains) {
+    this.juno = "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu";
+    this.cosmoshub = "cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2";
+    this.chains = chains;
+  }
+
+  init = async () => {
+    await this.chains.map((c) => {
+      let rpc = c.best_apis.rpc[0].address;
+      c.name === "cosmoshub" ? (this.cosmosRpc = rpc) : (this.junoRpc = rpc);
+    });
+    this.cosmosClient = await makeClient(this.cosmosRpc);
+    this.junoClient = await makeClient(this.junoRpc);
+  };
+  getJunoValidator = async () => {
+    const val = await this.junoClient.staking.validator(this.juno);
+    return val.validator;
+  };
+  getCosmosValidator = async () => {
+    const val = await this.cosmosClient.staking.validator(this.cosmoshub);
+    return val.validator;
+  };
 }
 
 export class Account {

@@ -1,6 +1,6 @@
 <script setup>
 import  {ref, onMounted} from 'vue'
-import {Account, Chains } from "./utils/Client"
+import {Account, Chains, Validator } from "./utils/Client"
 import HeadingRow from "./components/HeadingRow.vue"
 let address = ref("");
 let chains = ref([]);
@@ -9,6 +9,8 @@ let loading = ref(false);
 let error = ref(false);
 let submitted = ref(false);
 let double = ref(false);
+let cosmosValidator = ref({});
+let junoValidator = ref({});
 
 let validators = ref([
     {
@@ -83,7 +85,11 @@ onMounted(async ()=> {
 let chainFetcher = new Chains(["juno", "cosmoshub"]);
 await chainFetcher.init();
 chains.value = chainFetcher.chains;
-console.log(chains.value)
+const validatorFetcher  = new Validator(chains.value);
+await validatorFetcher.init();
+junoValidator.value =  await validatorFetcher.getJunoValidator();
+cosmosValidator.value = await validatorFetcher.getCosmosValidator();
+
 
 })
 
@@ -98,7 +104,6 @@ let handleSubmit = async (e) => {
  }
   eligible.value = account.eligible;
   double.value = account.double;
-  console.log(account.eligible, account.double)
  loading.value= false;
 
 }
@@ -131,7 +136,7 @@ let getKeplr = async () => {
           <div class="mt-5">Verify your eligibility</div>
         </v-card-title>
         <v-card-text>
-          <v-btn @click="getKeplr" class="mb-5">Get Address From Keplr</v-btn>
+          <v-btn flat class="keplr-button mb-5" color="#5e72e4" @click="getKeplr">Get Address From Keplr</v-btn>
           <div class="text-body-2 mb-3"> OR</div>
         <v-form @submit.prevent="handleSubmit">
           <v-text-field type="text" v-model="address" label="Enter your address" > </v-text-field>
@@ -214,9 +219,13 @@ let getKeplr = async () => {
   height: 100vh;
   overflow-y: scroll;
 }
+.keplr-button {
+  color: white!important;
+  font-weight: bold !important;
+}
 
 .checker-form {
   margin: 0 auto;
-  max-width: 800px;
+  /* max-width: 800px; */
 }
 </style>
