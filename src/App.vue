@@ -189,8 +189,8 @@ let setManual = () => {
           <v-alert v-if="error" type="error">An error occured with the servers. Please try again.</v-alert>
           <div v-if="!loading && !error">
             <div v-if="eligible && !double">
-              <div class="text-body-1">You are eligible for the 50 $JUNO giveaway </div>
-               <div class="text-body-1 my-5">Would you love to get 100 $JUNO instead of 50?</div>
+              <div class="text-body-1">You are eligible for the 50 JUNO giveaway on chain. <br> Make sure to respect the other conditions mentionned in the <a target="__blank__" href="https://twitter.com/stakefrites_/status/1526253044723228673">Tweet</a></div>
+               <div class="text-body-1 my-5">Would you love to get 100 JUNO instead of 50?</div>
               <div class="text-body-2">Delegate 5 ATOM to Stake Frites </div>
               <div class="mt-5">
                 <v-btn href="https://wallet.keplr.app/#/cosmoshub/stake?modal=stake&validator=cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2">Delegate on KEPLR</v-btn>
@@ -198,15 +198,15 @@ let setManual = () => {
               </div>
             </div>
             <div v-if="eligible && double">
-              <div class="text-body-1">You are eligible for the 100 $JUNO giveaway</div>
+              <div class="text-body-1">You are eligible for the 100 JUNO giveaway on chain. <br> Make sure to respect the other conditions mentionned in the <a target="__blank__" href="https://twitter.com/stakefrites_/status/1526253044723228673">Tweet</a></div>
             </div>
             <div v-if="!eligible && !double">
-              <div class="text-body-1">You not eligible. <br> You need to delegate at least 5 $JUNO to Stake Frites 🥩 🍟  </div>
+              <div class="text-body-1">Sorry fren, keep cooking to be eligible. <br> You need to delegate at least 5 JUNO to Stake Frites 🥩 🍟  </div>
               <div class="mt-5">
                 <v-btn href="https://wallet.keplr.app/#/juno/stake?chainId=juno-1&modal=stake&validator=junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu">Delegate on KEPLR</v-btn>
                 <v-btn flat color="primary" class="ml-3" href="https://restake.app/juno/junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu">Delegate on Restake</v-btn>
               </div>
-              <div class="text-body-1 my-5">Would you love to get 100 $JUNO instead of 50?</div>
+              <div class="text-body-1 my-5">Would you love to get 100 JUNO instead of 50?</div>
               <div class="text-body-2">Delegate 5 ATOM to Stake Frites </div>
               <div class="mt-5">
                 <v-btn href="https://wallet.keplr.app/#/cosmoshub/stake?modal=stake&validator=cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2">Delegate on KEPLR</v-btn>
