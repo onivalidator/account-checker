@@ -164,3 +164,12 @@ export class Account {
     }
   };
 }
+
+export const validateAddress = (address) => {
+  try {
+    fromBech32(address);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

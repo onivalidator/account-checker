@@ -1,5 +1,6 @@
 <script setup>
-import  {ref, onMounted} from 'vue'
+import  {ref, onMounted, onBeforeMount} from 'vue'
+import { fromBech32, normalizeBech32, toBech32 } from "@cosmjs/encoding";
 import {Account, Chains, Validator } from "./utils/Client"
 import HeadingRow from "./components/HeadingRow.vue"
 let address = ref("");
@@ -11,6 +12,10 @@ let submitted = ref(false);
 let double = ref(false);
 let cosmosValidator = ref({});
 let junoValidator = ref({});
+let keplr = ref(false);
+let manual = ref(false);
+let isFormValid = ref(false);
+let errorMessages = ref('');
 
 let validators = ref([
     {
@@ -80,6 +85,15 @@ let validators = ref([
     }
 ])
 
+onBeforeMount(()=> {
+if (window.keplr)  {
+  console.log("keplr is loaded");
+  keplr.value = true;
+} else {
+  console.log("keplr is not loaded")
+  keplr.value = false;
+}
+})
 
 onMounted(async ()=> {
 let chainFetcher = new Chains(["juno", "cosmoshub"]);
@@ -89,9 +103,20 @@ const validatorFetcher  = new Validator(chains.value);
 await validatorFetcher.init();
 junoValidator.value =  await validatorFetcher.getJunoValidator();
 cosmosValidator.value = await validatorFetcher.getCosmosValidator();
-
-
 })
+
+function validateAddress(a) {
+    try {
+      fromBech32(a);
+      errorMessages.value =  ''
+      isFormValid.value = true;
+      return true;
+    } catch (error) {
+      errorMessages.value =  'Invalid address'
+      isFormValid.value = false;
+      return "Invalid address";
+    }
+  }
 
 
 let handleSubmit = async (e) => {
@@ -120,7 +145,13 @@ let reset = () => {
 let getKeplr = async () => {
   window.keplr.enable("juno-1");
   const key = await window.keplr.getKey("juno-1");
+  manual.value = true;
   address.value =key.bech32Address;
+  validateAddress(address.value)
+}
+
+let setManual = () => {
+  manual.value = true;
 }
 
 </script>
@@ -141,12 +172,14 @@ let getKeplr = async () => {
           <div class="mt-5">Hello fren! Let's verify your eligibility, shall we?</div>
         </v-card-title>
         <v-card-text>
-          <v-btn flat class="keplr-button mb-5" color="#5e72e4" @click="getKeplr">Get Address From Keplr</v-btn>
-          <div class="text-body-2 mb-3"> OR</div>
-        <v-form @submit.prevent="handleSubmit">
-          <v-text-field type="text" v-model="address" label="Enter your address" > </v-text-field>
-          <v-btn flat color="primary" type="submit"> Check</v-btn>
-        </v-form>
+          <div class="d-flex flex-column">
+            <v-btn v-if="keplr" flat class="keplr-button mb-5" color="#5e72e4" @click="getKeplr">Get Address From Keplr</v-btn>
+            <v-btn @click="setManual" flat v-if="keplr">Enter address manually</v-btn>
+          </div>
+          <v-form class="mt-5" v-if="!keplr || manual" @submit.prevent="handleSubmit">
+            <v-text-field @change="validateAddress(address)" :error-messages="errorMessages" type="text" v-model="address" label="Enter your address" > </v-text-field>
+            <v-btn v-if="isFormValid" flat color="primary" type="submit"> Check</v-btn>
+          </v-form>
         </v-card-text>
         </template>
         <template v-else>
