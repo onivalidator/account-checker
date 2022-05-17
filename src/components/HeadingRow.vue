@@ -1,5 +1,5 @@
 <template>
- <v-row>
+ <v-row class="title">
     <v-col>
       <div class="main-heading">Stake Frites' 🥩 🍟 </div>
       <div class="second-heading">$JUNO giveaway checker</div>

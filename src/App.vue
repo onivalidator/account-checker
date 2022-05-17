@@ -129,11 +129,16 @@ let getKeplr = async () => {
 <v-app class="app" full-heigth >
   <v-container>
   <HeadingRow />
-  <v-row v-if="!submitted">
+  <v-row  > 
     <v-col>
-      <v-card class="checker-form mt-15">
-        <v-card-title>
-          <div class="mt-5">Verify your eligibility</div>
+      <v-card class="checker-form" color="white" elevation="8">
+        <v-img src="https://res.cloudinary.com/la-tranchee/image/upload/v1652820778/steak_ut3pfq.png"
+  max-width="100%">
+          
+        </v-img>
+        <template v-if="!submitted">
+          <v-card-title>
+          <div class="mt-5">Hello fren! Let's verify your eligibility, shall we?</div>
         </v-card-title>
         <v-card-text>
           <v-btn flat class="keplr-button mb-5" color="#5e72e4" @click="getKeplr">Get Address From Keplr</v-btn>
@@ -143,12 +148,8 @@ let getKeplr = async () => {
           <v-btn flat color="primary" type="submit"> Check</v-btn>
         </v-form>
         </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
-  <v-row  v-if="submitted"> 
-    <v-col>
-      <v-card class="checker-form">
+        </template>
+        <template v-else>
         <v-card-title>Eligibility</v-card-title>
         <v-card-text>
           <v-progress-circular indeterminate v-if="loading && !error"></v-progress-circular>
@@ -184,13 +185,15 @@ let getKeplr = async () => {
         <v-card-actions>
           <v-btn @click="reset">Check again</v-btn>
         </v-card-actions>
+        </template>
       </v-card>
     </v-col>
   </v-row>
   <v-row>
     <v-col>
-      <v-card class="checker-form mt-10"> 
-        <v-card-title>How to support us?</v-card-title>
+      <v-card class="checker-form mt-10" flat> 
+        <h2 class="px-4">How to support us?</h2>
+        <v-divider/>
           <v-list>
             <v-list-subheader class="mb-5">
                 At Stake Frites, we are huge believers of decentralization.<br>
@@ -207,13 +210,20 @@ let getKeplr = async () => {
       </v-card>
     </v-col>
   </v-row>
+ 
+    <v-footer class="mt-8">
+      <v-row >
+      <v-divider class="mb-4"/>
+      <p class="mb-8"> You like steak as much as you like crypto? Follow us on <a href="https://twitter.com/stakefrites_">Twitter</a>!</p>
+      </v-row>
 
+    </v-footer>
 </v-container>
 </v-app>
 </template>
 
 <style>
-
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Poppins:ital,wght@0,900;1,900&display=swap');
 
 .app {
   height: 100vh;
@@ -224,7 +234,23 @@ let getKeplr = async () => {
   font-weight: bold !important;
 }
 
-.checker-form {
+.v-card{
+  border-radius:16px!important;
+} 
+
+*{
+  font-family: 'Inconsolata', monospace;
+}
+
+.title, .title *{
+  font-family: 'Poppins', sans-serif;
+}
+
+.v-btn{
+  border-radius:8px!important;
+}
+
+.checker-form, .v-footer {
   margin: 0 auto;
   /* max-width: 800px; */
 }
