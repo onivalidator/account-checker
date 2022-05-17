@@ -160,8 +160,8 @@ let setManual = () => {
 <v-app class="app" full-heigth >
   <v-container>
   <HeadingRow />
-  <v-row  > 
-    <v-col>
+  <v-row class="d-flex justify-center"  > 
+    <v-col md="8" sm="12">
       <v-card class="checker-form" color="white" elevation="8">
         <v-img src="https://res.cloudinary.com/la-tranchee/image/upload/v1652820778/steak_ut3pfq.png"
   max-width="100%">
@@ -222,8 +222,8 @@ let setManual = () => {
       </v-card>
     </v-col>
   </v-row>
-  <v-row>
-    <v-col>
+  <v-row class="d-flex justify-center">
+    <v-col md="8" sm="12">
       <v-card class="checker-form mt-10" flat> 
         <h2 class="px-4">How to support us?</h2>
         <v-divider/>
@@ -245,9 +245,11 @@ let setManual = () => {
   </v-row>
  
     <v-footer class="mt-8">
-      <v-row >
+      <v-row class="d-flex justify-center"  > 
+      <v-col md="8" sm="12">
       <v-divider class="mb-4"/>
       <p class="mb-8"> You like steak as much as you like crypto? Follow us on <a href="https://twitter.com/stakefrites_">Twitter</a>!</p>
+      </v-col>
       </v-row>
 
     </v-footer>
