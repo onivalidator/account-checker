@@ -5,13 +5,13 @@ import { fromBech32 } from "@cosmjs/encoding";
 import {  Account} from "../utils/Client"
 
 const loaderStore = useLoaderStore();
-const { loading, error, keplr, address, chains, eligible, submitted, double, manual,isFormValid,errorMessages} = storeToRefs(loaderStore);
+const { loading, error, keplr, address, eligible, submitted, double, manual,isFormValid,errorMessages} = storeToRefs(loaderStore);
 
 
 let handleSubmit = async (e) => {
   submitted.value = true;
   loading.value = true;
-  let account = new Account(address.value, chains.value);
+  let account = new Account(address.value);
   let hasError = await account.init();
   if (hasError) {
     error.value = true;

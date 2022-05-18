@@ -22,7 +22,7 @@ manual.value = false;
               <v-card-title>Eligibility</v-card-title>
               <v-card-text>
                 <v-progress-circular indeterminate v-if="loading && !error"></v-progress-circular>
-                <v-alert v-if="error" type="error">An error occured with the servers. Please try again.</v-alert>
+                <v-alert v-if="error" type="error">The public RPC server is having some troubles. Please try again.</v-alert>
                 <div v-if="!loading && !error">
                   <div v-if="eligible && !double">
                     <div class="text-body-1">You are eligible for the 50 JUNO giveaway on chain. <br> Make sure to
@@ -47,7 +47,7 @@ manual.value = false;
                         href="https://twitter.com/stakefrites_/status/1526253044723228673">Tweet</a></div>
                   </div>
                   <div v-if="!eligible && !double">
-                    <div class="text-body-1">Sorry fren, keep cooking to be eligible. <br> You need to delegate at least
+                    <div class="text-body-1">Sorry fren, keep cooking to be eligible for the 50 JUNO giveaway. <br> You need to delegate at least
                       5 JUNO to Stake Frites 🥩 🍟 </div>
                     <div class="mt-5">
                       <v-btn
@@ -59,7 +59,7 @@ manual.value = false;
                         href="https://restake.app/juno/junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu">Delegate on
                         Restake</v-btn>
                     </div>
-                    <div class="text-body-1 my-5">Would you love to get 100 JUNO instead of 50?</div>
+                    <div class="text-body-1 my-5">Would you love to get <strong>100 JUNO</strong> instead of 50?</div>
                     <div class="text-body-2">Delegate 5 ATOM to Stake Frites </div>
                     <div class="mt-5">
                       <v-btn
