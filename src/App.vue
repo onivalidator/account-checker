@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue'
+import { ref,reactive, computed, onMounted, onBeforeMount } from 'vue'
 import { fromBech32, normalizeBech32, toBech32 } from "@cosmjs/encoding";
 import { Account, Chains, Validator } from "./utils/Client"
 import HeadingRow from "./components/HeadingRow.vue"
@@ -10,12 +10,17 @@ let loading = ref(false);
 let error = ref(false);
 let submitted = ref(false);
 let double = ref(false);
-let cosmosValidator = ref({});
-let junoValidator = ref({});
+let cosmosValidator = reactive({});
+let junoValidator = reactive({});
 let keplr = ref(false);
 let manual = ref(false);
 let isFormValid = ref(false);
 let errorMessages = ref('');
+let currentVP = ref(8700);
+let goalVP = ref(10000);
+let percentLeft = ref(0.13);
+let progressLoading = ref(true)
+
 
 let validators = ref([
   {
@@ -87,15 +92,14 @@ let validators = ref([
 
 onBeforeMount(() => {
   if (window.keplr) {
-    console.log("keplr is loaded");
     keplr.value = true;
   } else {
-    console.log("keplr is not loaded")
     keplr.value = false;
   }
 })
 
 onMounted(async () => {
+  progressLoading.value = true;
   let chainFetcher = new Chains(["juno", "cosmoshub"]);
   await chainFetcher.init();
   chains.value = chainFetcher.chains;
@@ -103,6 +107,10 @@ onMounted(async () => {
   await validatorFetcher.init();
   junoValidator.value = await validatorFetcher.getJunoValidator();
   cosmosValidator.value = await validatorFetcher.getCosmosValidator();
+  currentVP.value = parseFloat(junoValidator.value.tokens / Math.pow(10,6)).toFixed();
+  goalVP.value = Math.ceil(parseFloat(junoValidator.value.tokens *1.2 / Math.pow(10,6))/1000) *1000;
+  percentLeft.value = parseFloat(1- (currentVP.value / goalVP.value)).toFixed(2);
+  progressLoading.value = false;
 })
 
 function validateAddress(a) {
@@ -165,10 +173,10 @@ let setManual = () => {
             <v-img src="https://res.cloudinary.com/la-tranchee/image/upload/v1652820778/steak_ut3pfq.png"
               max-width="100%">
               <div class="bottom-gradient"></div>
-              <div style="z-index:2; position: absolute; bottom:10px; left:0px; right:0px; color:#fff"
+              <div v-if="!progressLoading" style="z-index:2; position: absolute; bottom:10px; left:0px; right:0px; color:#fff"
                 class="px-4 goal">
-                <b>8530 JUNO</b>out of the 15000 goal (only 43% left!)
-                <v-progress-linear rounded color="white" height="8" modelValue="50" stream></v-progress-linear>
+                <b>{{currentVP}} JUNO</b>out of the {{goalVP}} goal (only {{percentLeft * 100}}% left!)
+                <v-progress-linear rounded color="white" height="8" :modelValue="(100 - percentLeft* 100)" stream></v-progress-linear>
               </div>
             </v-img>
             <template v-if="!submitted">
