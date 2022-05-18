@@ -1,94 +1,22 @@
 <script setup>
-import { ref,reactive, computed, onMounted, onBeforeMount } from 'vue'
-import { fromBech32, normalizeBech32, toBech32 } from "@cosmjs/encoding";
+import { onMounted, onBeforeMount } from 'vue'
+import { fromBech32 } from "@cosmjs/encoding";
 import { Account, Chains, Validator } from "./utils/Client"
+import {useLoaderStore, useValidatorStore } from "./store"
+import {storeToRefs} from "pinia"
 import HeadingRow from "./components/HeadingRow.vue"
-let address = ref("");
-let chains = ref([]);
-let eligible = ref(false);
-let loading = ref(false);
-let error = ref(false);
-let submitted = ref(false);
-let double = ref(false);
-let cosmosValidator = reactive({});
-let junoValidator = reactive({});
-let keplr = ref(false);
-let manual = ref(false);
-let isFormValid = ref(false);
-let errorMessages = ref('');
-let currentVP = ref(8700);
-let goalVP = ref(10000);
-let percentLeft = ref(0.13);
-let progressLoading = ref(true)
+import ValidatorList from "./components/ValidatorList.vue"
+
+const loaderStore = useLoaderStore();
+const validatorStore = useValidatorStore();
+const {
+  currentVP, goalVP, percentLeft, progressLoading, loading,
+  error, keplr, address, chains, eligible, submitted, double,cosmosValidator,
+  junoValidator,manual,isFormValid,errorMessages} = storeToRefs(loaderStore);
+const {validators} = storeToRefs(validatorStore);
 
 
-let validators = ref([
-  {
-    name: "Juno",
-    validator: "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu",
-    commission: "5%",
-    chain: "juno",
-    restake: true
-  },
-  {
-    name: "Cosmos",
-    validator: "cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2",
-    commission: "5%",
-    chain: "cosmoshub",
-    restake: true
-  },
-  {
-    name: "Akash",
-    validator: "akashvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmlsqkfuf",
-    commission: "5%",
-    chain: "akash",
-    restake: true
-  }
-  , {
-    name: "Evmos",
-    validator: "evmosvaloper1pz3mcahcrglf3md4lggax5r95gvmppc6x5w7hw",
-    commission: "5%",
-    chain: "evmos",
-    restake: false
-  },
-  {
-    name: "Sifchain",
-    validator: "sifvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmlmxj56z",
-    commission: "5%",
-    chain: "sifchain",
-    restake: false
-  },
-  {
-    name: "Lum Network",
-    validator: "lumvaloper1kn7zgwex5yr897mp9vy83vm9re53skyhr82s58",
-    commission: "10%",
-    chain: "lumnetwork",
-    restake: true
 
-  },
-  {
-    name: "Chihuahua",
-    validator: "chihuahuavaloper1zl4vt84hya03e8hu7dx4q4cvn2ts2xdr685p5g",
-    commission: "5%",
-    chain: "chihuahua",
-    restake: false
-  },
-  {
-    name: "Cerberus",
-    validator: "cerberusvaloper1zl4vt84hya03e8hu7dx4q4cvn2ts2xdrrnnufr",
-    chain: "cerberus",
-    restake: true,
-    commission: "5%"
-  },
-  {
-    name: "Nomic",
-    validator: "nomicvaloper",
-    commission: "5%",
-    chain: "nomic",
-    isNomic: true,
-    restake: false
-  }
-])
 
 onBeforeMount(() => {
   if (window.keplr) {
@@ -107,7 +35,7 @@ onMounted(async () => {
   await validatorFetcher.init();
   junoValidator.value = await validatorFetcher.getJunoValidator();
   cosmosValidator.value = await validatorFetcher.getCosmosValidator();
-  currentVP.value = parseFloat(junoValidator.value.tokens / Math.pow(10,6)).toFixed();
+  currentVP.value = Math.round(junoValidator.value.tokens / Math.pow(10,6));
   goalVP.value = Math.ceil(parseFloat(junoValidator.value.tokens *1.2 / Math.pow(10,6))/1000) *1000;
   percentLeft.value = parseFloat(1- (currentVP.value / goalVP.value)).toFixed(2);
   progressLoading.value = false;
@@ -259,22 +187,7 @@ let setManual = () => {
           <v-card class="checker-form mt-10" flat>
             <h2 class="px-4">How to support us?</h2>
             <v-divider />
-            <v-list>
-              <v-list-subheader class="mb-5">
-                At Stake Frites, we are huge believers of decentralization.<br>
-                We are also a bunch of entrepreneurs, and developpers trying to give our all to the community. <br>
-                Consider delegating with us on KEPLR or Restake to help us to grow.
-              </v-list-subheader>
-              <v-list-item target="__blank__" lines="three" v-for="validator in validators"
-                :href="validator.isNomic ? `https://app.nomic.io/` : validator.restake ? `https://restake.app/${validator.chain}/${validator.validator}` : `https://wallet.keplr.app/#/${validator.chain}/stake?modal=stake&validator=${validator.validator}`">
-                <v-list-item-header>
-                  <v-list-item-title>
-                    <div class="text-h6">{{ validator.name }}</div>
-                  </v-list-item-title>
-                  <v-list-item-subtitle><strong>Commission:</strong> {{ validator.commission }}</v-list-item-subtitle>
-                </v-list-item-header>
-              </v-list-item>
-            </v-list>
+            <ValidatorList :validators="validators" />
           </v-card>
         </v-col>
       </v-row>
@@ -351,6 +264,5 @@ let setManual = () => {
 .checker-form,
 .v-footer {
   margin: 0 auto;
-  /* max-width: 800px; */
 }
 </style>
