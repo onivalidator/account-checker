@@ -37,38 +37,16 @@ const makeClient = async (rpcUrl) => {
   );
 };
 
-export class Chains {
-  constructor(enabled) {
-    this.enabled = enabled;
-    this.chains = [];
-  }
-  async init() {
-    const directory = CosmosDirectory();
-    let chains = await directory.getChains();
-    chains = Object.values(chains).filter((c) => this.enabled.includes(c.name));
-    this.chains = await mapAsync(chains, async (c) => {
-      const chainData = await directory.getChainData(c.name);
-      return {
-        ...c,
-        prefix: chainData.bech32_prefix,
-        decimals: c.decimals,
-      };
-    });
-  }
-}
-
 export class Validator {
   constructor(chains) {
     this.juno = "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu";
     this.cosmoshub = "cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2";
     this.chains = chains;
+    this.junoRpc = "https://rpc.cosmos.directory/juno";
+    this.cosmosRpc = "https://rpc.cosmos.directory/cosmoshub";
   }
 
   init = async () => {
-    await this.chains.map((c) => {
-      let rpc = c.best_apis.rpc[0].address;
-      c.name === "cosmoshub" ? (this.cosmosRpc = rpc) : (this.junoRpc = rpc);
-    });
     this.cosmosClient = await makeClient(this.cosmosRpc);
     this.junoClient = await makeClient(this.junoRpc);
   };
@@ -83,15 +61,14 @@ export class Validator {
 }
 
 export class Account {
-  constructor(address, chains) {
+  constructor(address) {
     this.address = address;
-    this.chains = chains;
     this.eligible = false;
     this.double = false;
     this.juno = {
       address: "",
       prefix: "juno",
-      rpc: "",
+      rpc: "https://rpc.cosmos.directory/juno",
       delegated: false,
       amount: 0,
       other: [],
@@ -99,7 +76,7 @@ export class Account {
     this.cosmoshub = {
       address: "",
       prefix: "cosmos",
-      rpc: "",
+      rpc: "https://rpc.cosmos.directory/cosmoshub",
       delegated: false,
       amount: 0,
       other: [],
@@ -109,12 +86,6 @@ export class Account {
   init = async () => {
     try {
       await this.getAddresses();
-      await this.chains.map((c) => {
-        let rpc = c.best_apis.rpc[0].address;
-        c.name === "cosmoshub"
-          ? (this.cosmoshub.rpc = rpc)
-          : (this.juno.rpc = rpc);
-      });
       await this.getEligibility();
     } catch (error) {
       return error;

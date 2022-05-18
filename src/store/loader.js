@@ -10,7 +10,6 @@ export const useLoaderStore = defineStore("loader", {
     error: false,
     keplr: false,
     address: "",
-    chains: [],
     eligible: false,
     submitted: false,
     double: false,
