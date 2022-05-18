@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onBeforeMount } from 'vue'
-import {  Chains, Validator } from "./utils/Client"
+import {  Validator } from "./utils/Client"
 import {useLoaderStore, useValidatorStore } from "./store"
 import {storeToRefs} from "pinia"
 import HeadingRow from "./components/HeadingRow.vue"
@@ -27,10 +27,7 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   progressLoading.value = true;
-  let chainFetcher = new Chains(["juno", "cosmoshub"]);
-  await chainFetcher.init();
-  chains.value = chainFetcher.chains;
-  const validatorFetcher = new Validator(chains.value);
+  const validatorFetcher = new Validator();
   await validatorFetcher.init();
   junoValidator.value = await validatorFetcher.getJunoValidator();
   cosmosValidator.value = await validatorFetcher.getCosmosValidator();
