@@ -88,6 +88,7 @@ export class Account {
       await this.getAddresses();
       await this.getEligibility();
     } catch (error) {
+      console.log(error);
       return error;
     }
   };
@@ -119,6 +120,8 @@ export class Account {
     }));
 
     const stkJuno = junoStakedMap.find((s) => s.validator == junoVal);
+
+    console.log(stkJuno);
     const stkCosmos = cosmosStakedMap.find((s) => s.validator == cosmosVal);
 
     if (stkJuno) {
@@ -128,9 +131,11 @@ export class Account {
     }
 
     if (stkCosmos) {
-      console.log("staked");
       this.cosmoshub.delegated = true;
       this.cosmoshub.amount = stkCosmos.amount / Math.pow(10, 18 + 6);
+    }
+
+    if (stkCosmos && stkJuno) {
       this.double = stkJuno.amount / Math.pow(10, 18 + 6) > 5;
     }
   };

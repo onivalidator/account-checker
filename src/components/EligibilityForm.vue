@@ -5,7 +5,7 @@ import { fromBech32 } from "@cosmjs/encoding";
 import {  Account} from "../utils/Client"
 
 const loaderStore = useLoaderStore();
-const { loading, error, keplr, address, eligible, submitted, double, manual,isFormValid,errorMessages} = storeToRefs(loaderStore);
+const { loading,cosmosDelegation, error, keplr, address, eligible, submitted, double, manual,isFormValid,errorMessages, cosmoshubStaked, junoStaked} = storeToRefs(loaderStore);
 
 
 let handleSubmit = async (e) => {
@@ -16,9 +16,12 @@ let handleSubmit = async (e) => {
   if (hasError) {
     error.value = true;
   }
+  cosmosDelegation.value = account.cosmoshub.delegated;
   eligible.value = account.eligible;
   double.value = account.double;
   loading.value = false;
+  cosmoshubStaked.value = account.cosmoshub
+  junoStaked.value = account.juno
 
 }
 
