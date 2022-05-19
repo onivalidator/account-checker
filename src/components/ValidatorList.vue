@@ -21,9 +21,9 @@ defineProps({
                 <tr>
                     <th>Network</th>
                     <th>Voting Power</th>
-                    <th>Address</th>
-                    <th>Commission</th>
                     <th></th>
+                    <th>Commission</th>
+                    <th>Address</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,12 +31,12 @@ defineProps({
                     <td>{{validator.name}}</td>
                     <td v-if="!loading">{{validator.votingPower}}</td>
                     <td v-else><v-progress-circular  width="2" size="x-small" indeterminate></v-progress-circular></td>
-
-                    <td >{{validator.validator.slice(0,10)}}...{{validator.validator.slice(-10)}}</td>
-                    <td>{{validator.commission}}</td>
                     <td>
                         <v-btn target="__blank__" size="x-small" flat color="primary" :href="validator.isNomic ? `https://app.nomic.io/` : validator.restake ? `https://restake.app/${validator.chain}/${validator.validator}` : `https://wallet.keplr.app/#/${validator.chain}/stake?modal=stake&validator=${validator.validator}`">Delegate</v-btn>
                     </td>
+                    <td>{{validator.commission}}</td>
+
+                    <td >{{validator.validator.slice(0,10)}}...{{validator.validator.slice(-10)}}</td>
                 </tr>
             </tbody>
         </v-table>
