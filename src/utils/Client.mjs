@@ -37,6 +37,24 @@ const makeClient = async (rpcUrl) => {
   );
 };
 
+export class Validators {
+  constructor(validators) {
+    this.validators = validators;
+    this.directory = CosmosDirectory();
+  }
+  getValidators = async () => {
+    return await mapAsync(
+      this.validators.filter((val) => val.chain !== "nomic"),
+      async (validator) => {
+        const client = await makeClient(this.directory.rpcUrl(validator.chain));
+        const operator = validator.validator;
+        const fetchValidator = await client.staking.validator(operator);
+        return { [validator.chain]: fetchValidator.validator };
+      }
+    );
+  };
+}
+
 export class Validator {
   constructor(chains) {
     this.juno = "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu";
