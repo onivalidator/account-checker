@@ -9,16 +9,14 @@ const {  percentLeft, currentVP, goalVP} = storeToRefs(loaderStore);
 </script>
 
 <template>
- <v-img src="https://res.cloudinary.com/la-tranchee/image/upload/v1652820778/steak_ut3pfq.png"
-              max-width="100%">
-              <div class="bottom-gradient"></div>
-              <div v-if="!progressLoading" style="z-index:2; position: absolute; bottom:10px; left:0px; right:0px; color:#fff"
-                class="px-4 goal">
-                <Countdown/>
-                <b>{{currentVP}} JUNO</b>out of the {{goalVP}} goal (only {{percentLeft * 100}}% left!)
-                <v-progress-linear rounded color="white" height="8" :modelValue="(100 - percentLeft* 100)" stream></v-progress-linear>
-              </div>
-            </v-img>
+  <v-img src="https://res.cloudinary.com/la-tranchee/image/upload/v1652820778/steak_ut3pfq.png" max-width="100%">
+    <div class="bottom-gradient"></div>
+    <div v-if="!progressLoading" style="z-index:2; position: absolute; bottom:10px; left:0px; right:0px; color:#fff" class="px-4 goal">
+      <Countdown/>
+      <b>{{currentVP}} JUNO</b>out of the {{goalVP}} goal (only {{percentLeft * 100}}% left!)
+      <v-progress-linear rounded color="white" height="8" :modelValue="(100 - percentLeft* 100)" stream></v-progress-linear>
+    </div>
+  </v-img>
 </template>
 
 <style scoped>
@@ -27,6 +25,7 @@ const {  percentLeft, currentVP, goalVP} = storeToRefs(loaderStore);
   letter-spacing: 0.1em;
   opacity: .9;
 }
+
 
 .goal b {
   font-size: 1.5em;
@@ -40,7 +39,7 @@ const {  percentLeft, currentVP, goalVP} = storeToRefs(loaderStore);
   top: 0px;
   bottom: 0px;
   background: rgb(0, 0, 0);
-  background: linear-gradient(00deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(00deg, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 0) 100%);
 }
 
 .v-progress-linear__determinate {
