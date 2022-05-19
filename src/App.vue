@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, onBeforeMount } from 'vue'
-import {  Validator } from "./utils/Client"
-import {useLoaderStore, useValidatorStore } from "./store"
+import {  Validator, Validators } from "./utils/Client"
 import {storeToRefs} from "pinia"
+import {useLoaderStore, useValidatorStore } from "./store"
 import HeadingRow from "./components/HeadingRow.vue"
 import ValidatorList from "./components/ValidatorList.vue"
 import EligibilityForm from "./components/EligibilityForm.vue"
@@ -17,6 +17,7 @@ const {currentVP, goalVP, percentLeft, progressLoading,keplr, chains,  submitted
 const {validators} = storeToRefs(validatorStore);
 
 
+
 onBeforeMount(() => {
   if (window.keplr) {
     keplr.value = true;
@@ -29,8 +30,20 @@ onMounted(async () => {
   progressLoading.value = true;
   const validatorFetcher = new Validator();
   await validatorFetcher.init();
+  const validatorsFetcher = new Validators(validators.value);
+  const validatorsData = await validatorsFetcher.getValidators();
+  validatorsData.forEach((val) => {
+    let chainName = Object.keys(val)[0];
+    let number;
+    if (chainName == "evmos" || chainName == "sifchain") {
+     number =  new Intl.NumberFormat('en-US').format(Math.round(val[chainName].tokens / Math.pow(10,18)))
+      
+    } else {
+      number = new Intl.NumberFormat('en-US').format(Math.round(val[chainName].tokens / Math.pow(10,6)))
+    }
+   validatorStore.validators[validatorStore.validators.findIndex(v => v.chain == chainName)].votingPower = number  
+  })
   junoValidator.value = await validatorFetcher.getJunoValidator();
-  cosmosValidator.value = await validatorFetcher.getCosmosValidator();
   currentVP.value = Math.round(junoValidator.value.tokens / Math.pow(10,6));
   goalVP.value = Math.ceil(parseFloat(junoValidator.value.tokens *1.2 / Math.pow(10,6))/1000) *1000;
   percentLeft.value = parseFloat(1- (currentVP.value / goalVP.value)).toFixed(2);
@@ -57,7 +70,7 @@ onMounted(async () => {
           <v-card class="checker-form mt-10" flat>
             <h2 class="px-4">How to support us?</h2>
             <v-divider />
-            <ValidatorList :validators="validators" />
+            <ValidatorList :loading="progressLoading" :validators="validators" />
           </v-card>
         </v-col>
       </v-row>
