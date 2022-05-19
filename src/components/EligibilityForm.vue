@@ -60,7 +60,7 @@ let setManual = () => {
     </v-card-title>
     <v-card-text>
     <div class="d-flex flex-column">
-        <v-btn v-if="keplr" flat class="keplr-button mb-5" color="#5e72e4" @click="getKeplr">Get Address From
+        <v-btn v-if="keplr" flat class="keplr-button mb-3" @click="getKeplr">Get Address From
         Keplr</v-btn>
         <v-btn @click="setManual" flat v-if="keplr">Enter address manually</v-btn>
     </div>
@@ -77,7 +77,9 @@ let setManual = () => {
 
 .keplr-button {
   color: white !important;
-  font-weight: bold !important;
+  font-weight: bold;
+  background: rgb(163,93,247);
+  background: linear-gradient(325deg, rgba(163,93,247,1) 0%, rgba(107,190,249,1) 75%, rgba(110,194,253,1) 100%);
 }
 
 </style>
