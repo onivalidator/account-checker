@@ -9,6 +9,7 @@ import EligibilityForm from "./components/EligibilityForm.vue"
 import EligibilityResult from "./components/EligibilityResult.vue"
 import EligibilityCardHeader from "./components/EligibilityCardHeader.vue"
 import Footer from "./components/Footer.vue"
+import Countdown from './components/Countdown.vue'
 
 const loaderStore = useLoaderStore();
 const validatorStore = useValidatorStore();

@@ -1,6 +1,7 @@
 <script setup>
 import {useLoaderStore } from "../store"
 import {storeToRefs} from "pinia"
+import Countdown from "./Countdown.vue";
 
 const loaderStore = useLoaderStore();
 const {  percentLeft, currentVP, goalVP} = storeToRefs(loaderStore);
@@ -13,6 +14,7 @@ const {  percentLeft, currentVP, goalVP} = storeToRefs(loaderStore);
               <div class="bottom-gradient"></div>
               <div v-if="!progressLoading" style="z-index:2; position: absolute; bottom:10px; left:0px; right:0px; color:#fff"
                 class="px-4 goal">
+                <Countdown/>
                 <b>{{currentVP}} JUNO</b>out of the {{goalVP}} goal (only {{percentLeft * 100}}% left!)
                 <v-progress-linear rounded color="white" height="8" :modelValue="(100 - percentLeft* 100)" stream></v-progress-linear>
               </div>
