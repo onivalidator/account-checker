@@ -5,25 +5,26 @@
 <template>
  <v-row class="d-flex justify-center">
     <v-col sm="12" md="8">
-      <v-img class="logo" :src="img"></v-img>
-      <div class="second-heading">$JUNO giveaway checker</div>
+      <div class="d-flex justify-center">
+        <img class="logo" :src="img"/>
+        <div class="main-heading mt-5">GIVEAWAY<br>CHECKER</div>
+      </div>
     </v-col>
   </v-row>
 </template>
 
 <style>
 
-.main-heading {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  text-align: center;
+.logo{
+  width: 100px;
+  height: 100px;
 }
 
-.second-heading {
-  font-size: 2.5rem;
-  line-height: 90%;
-  text-align: center;
+.main-heading {
+  font-size: 32px;
+  font-weight: 700;
+  color: #a71c1b;
+  line-height: 1;
 }
 
 </style>

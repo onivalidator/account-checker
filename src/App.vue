@@ -52,7 +52,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-app class="app" full-heigth>
+  <v-app class="app" full-height>
     <v-container>
       <HeadingRow />
       <v-row class="d-flex justify-center">
@@ -82,24 +82,16 @@ onMounted(async () => {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Poppins:ital,wght@0,900;1,900&display=swap');
-
-.app {
-  height: 100vh;
-  overflow-y: scroll;
-}
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap');
 
 .v-card {
   border-radius: 16px !important;
 }
 
-* {
-  font-family: 'Inconsolata', monospace;
+body {
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-.title,
-.title * {
-  font-family: 'Poppins', sans-serif;
-}
 
 .v-btn {
   border-radius: 8px !important;

@@ -31,8 +31,8 @@ setInterval(()=>{
 </script>
 
 <template>
-    <v-row class="d-flex justify-center">
-        <v-col cols="8" sm="6" >
+    <v-row class="d-flex justify-center pt-10">
+        <v-col sm="12" md="6">
             <div class="d-flex justify-space-between mb-2">
                 <div class="d-flex flex-column align-center">
                     <div class="text-h5 mx-1">{{days}}</div>
