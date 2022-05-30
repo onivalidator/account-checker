@@ -5,10 +5,15 @@ const days = ref("");
 const hours = ref("");
 const minutes = ref("");
 const seconds = ref("");
+const isDone = ref(false);
 
 onBeforeMount(()=> {
     const now = new moment();
     const end = moment.utc("2022-05-30");
+    if (now > end) {
+        isDone.value = true;
+    } 
+
 
     const diff = moment.duration(end.diff(now))
     days.value = diff.days();
@@ -32,7 +37,7 @@ setInterval(()=>{
 
 <template>
     <v-row class="d-flex justify-center pt-10">
-        <v-col sm="12" md="6">
+        <v-col sm="12" md="6" v-if="!isDone">
             <div class="d-flex justify-space-between mb-2">
                 <div class="d-flex flex-column align-center">
                     <div class="text-h5 mx-1">{{days}}</div>
@@ -51,6 +56,9 @@ setInterval(()=>{
                     <div>seconds</div>
                 </div>
             </div>
+        </v-col>
+        <v-col v-else>
+            <div>... Our scripts are currently finding a winner</div>
         </v-col>
     </v-row>
 </template>
