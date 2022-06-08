@@ -59,15 +59,19 @@ export class Validator {
   constructor(chains) {
     this.juno = "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu";
     this.cosmoshub = "cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2";
+    this.evmos = "evmosvaloper1pz3mcahcrglf3md4lggax5r95gvmppc6x5w7hw";
     this.chains = chains;
     this.junoRpc = "https://rpc.cosmos.directory/juno";
     this.cosmosRpc = "https://rpc.cosmos.directory/cosmoshub";
+    this.evmosRpc = "https://rpc.cosmos.directory/evmos";
   }
 
   init = async () => {
     this.cosmosClient = await makeClient(this.cosmosRpc);
     this.junoClient = await makeClient(this.junoRpc);
+    this.evmosClient = await makeClient(this.evmosRpc);
   };
+
   getJunoValidator = async () => {
     const val = await this.junoClient.staking.validator(this.juno);
     return val.validator;
@@ -76,25 +80,20 @@ export class Validator {
     const val = await this.cosmosClient.staking.validator(this.cosmoshub);
     return val.validator;
   };
+  getEvmosValidator = async () => {
+    const val = await this.evmosClient.staking.validator(this.evmos);
+    return val.validator;
+  };
 }
 
 export class Account {
   constructor(address) {
     this.address = address;
     this.eligible = false;
-    this.double = false;
-    this.juno = {
+    this.evmos = {
       address: "",
-      prefix: "juno",
-      rpc: "https://rpc.cosmos.directory/juno",
-      delegated: false,
-      amount: 0,
-      other: [],
-    };
-    this.cosmoshub = {
-      address: "",
-      prefix: "cosmos",
-      rpc: "https://rpc.cosmos.directory/cosmoshub",
+      prefix: "evmos",
+      rpc: "https://rpc.cosmos.directory/evmos",
       delegated: false,
       amount: 0,
       other: [],
@@ -103,7 +102,6 @@ export class Account {
 
   init = async () => {
     try {
-      await this.getAddresses();
       await this.getEligibility();
     } catch (error) {
       console.log(error);
@@ -111,50 +109,25 @@ export class Account {
     }
   };
 
-  getAddresses = () => {
-    const decoded = fromBech32(this.address);
-    this.juno.address = toBech32(this.juno.prefix, decoded.data);
-    this.cosmoshub.address = toBech32(this.cosmoshub.prefix, decoded.data);
-  };
-
   getEligibility = async () => {
-    const cosmosVal = "cosmosvaloper1uepjmgfuk6rnd0djsglu88w7d0t49lmljdpae2";
-    const junoVal = "junovaloper1uepjmgfuk6rnd0djsglu88w7d0t49lml7kqufu";
-    const cosmosClient = await makeClient(this.cosmoshub.rpc);
-    const junoClient = await makeClient(this.juno.rpc);
-    const stakedCosmos = await cosmosClient.staking.delegatorDelegations(
-      this.cosmoshub.address
+    const evmosVal = "evmosvaloper1pz3mcahcrglf3md4lggax5r95gvmppc6x5w7hw";
+
+    const evmosClient = await makeClient(this.evmos.rpc);
+    const stakedEvmos = await evmosClient.staking.delegatorDelegations(
+      this.address
     );
-    const cosmosStakedMap = stakedCosmos.delegationResponses.map((d) => ({
-      validator: d.delegation.validatorAddress,
-      amount: d.delegation.shares,
-    }));
-    const stakedJuno = await junoClient.staking.delegatorDelegations(
-      this.juno.address
-    );
-    const junoStakedMap = stakedJuno.delegationResponses.map((d) => ({
+    const evmosStakedMap = stakedEvmos.delegationResponses.map((d) => ({
       validator: d.delegation.validatorAddress,
       amount: d.delegation.shares,
     }));
 
-    const stkJuno = junoStakedMap.find((s) => s.validator == junoVal);
+    const stkEvmos = evmosStakedMap.find((s) => s.validator == evmosVal);
 
-    console.log(stkJuno);
-    const stkCosmos = cosmosStakedMap.find((s) => s.validator == cosmosVal);
-
-    if (stkJuno) {
-      this.juno.delegated = true;
-      this.juno.amount = stkJuno.amount / Math.pow(10, 18 + 6);
-      this.eligible = stkJuno.amount / Math.pow(10, 18 + 6) > 5;
-    }
-
-    if (stkCosmos) {
-      this.cosmoshub.delegated = true;
-      this.cosmoshub.amount = stkCosmos.amount / Math.pow(10, 18 + 6);
-    }
-
-    if (stkCosmos && stkJuno) {
-      this.double = stkJuno.amount / Math.pow(10, 18 + 6) > 5;
+    if (stkEvmos) {
+      this.evmos.delegated = true;
+      this.evmos.amount = stkEvmos.amount / Math.pow(10, 18 + 12 + 6);
+      this.eligible = stkEvmos.amount / Math.pow(10, 18 + 12 + 6) > 25;
+      this.double = stkEvmos.amount / Math.pow(10, 18 + 12 + 6) > 50;
     }
   };
 }
