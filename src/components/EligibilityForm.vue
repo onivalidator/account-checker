@@ -5,7 +5,7 @@ import { fromBech32 } from "@cosmjs/encoding";
 import {  Account} from "../utils/Client"
 
 const loaderStore = useLoaderStore();
-const { loading,cosmosDelegation, error, keplr, address, eligible, submitted, double, manual,isFormValid,errorMessages, cosmoshubStaked, junoStaked} = storeToRefs(loaderStore);
+const { loading,evmosDelegation, error, keplr, address, eligible, submitted, double, manual,isFormValid,errorMessages, evmosStaked} = storeToRefs(loaderStore);
 
 
 let handleSubmit = async (e) => {
@@ -16,19 +16,19 @@ let handleSubmit = async (e) => {
   if (hasError) {
     error.value = true;
   }
-  cosmosDelegation.value = account.cosmoshub.delegated;
+  console.log(account)
+  evmosDelegation.value = account.evmos.delegated;
+  evmosStaked.value = account.evmos
   eligible.value = account.eligible;
   double.value = account.double;
   loading.value = false;
-  cosmoshubStaked.value = account.cosmoshub
-  junoStaked.value = account.juno
 
 }
 
 
 let getKeplr = async () => {
   window.keplr.enable("juno-1");
-  const key = await window.keplr.getKey("juno-1");
+  const key = await window.keplr.getKey("evmos_9001-2");
   manual.value = true;
   address.value = key.bech32Address;
   validateAddress(address.value)

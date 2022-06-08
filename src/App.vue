@@ -12,7 +12,7 @@ import Footer from "./components/Footer.vue"
 
 const loaderStore = useLoaderStore();
 const validatorStore = useValidatorStore();
-const {currentVP, goalVP, percentLeft, progressLoading,keplr, chains,  submitted, cosmosValidator, junoValidator} = storeToRefs(loaderStore);
+const {currentVP, goalVP, percentLeft, progressLoading,keplr, chains,  submitted, cosmosValidator, junoValidator, evmosValidator} = storeToRefs(loaderStore);
 
 const {validators} = storeToRefs(validatorStore);
 
@@ -43,9 +43,10 @@ onMounted(async () => {
     }
    validatorStore.validators[validatorStore.validators.findIndex(v => v.chain == chainName)].votingPower = number  
   })
+  evmosValidator.value = await validatorFetcher.getEvmosValidator();
   junoValidator.value = await validatorFetcher.getJunoValidator();
-  currentVP.value = Math.round(junoValidator.value.tokens / Math.pow(10,6));
-  goalVP.value = Math.ceil(parseFloat(junoValidator.value.tokens *1.2 / Math.pow(10,6))/1000) *1000;
+  currentVP.value = Math.round(evmosValidator.value.tokens / Math.pow(10,18));
+  goalVP.value = Math.ceil(parseFloat(evmosValidator.value.tokens *1.2 / Math.pow(10,18))/1000) *1000;
   percentLeft.value = parseFloat(1- (currentVP.value / goalVP.value)).toFixed(2);
   progressLoading.value = false;
 })
