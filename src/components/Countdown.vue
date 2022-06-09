@@ -6,16 +6,16 @@ const hours = ref("");
 const minutes = ref("");
 const seconds = ref("");
 const isDone = ref(false);
+const endDate = moment.utc("2022-06-15");
 
 onBeforeMount(()=> {
     const now = new moment();
-    const end = moment.utc("2022-05-30");
-    if (now > end) {
+    if (now > endDate) {
         isDone.value = true;
     } 
 
 
-    const diff = moment.duration(end.diff(now))
+    const diff = moment.duration(endDate.diff(now))
     days.value = diff.days();
     hours.value = diff.hours();
     minutes.value = diff.minutes();
@@ -24,9 +24,8 @@ onBeforeMount(()=> {
 
 setInterval(()=>{
     const now = new moment();
-    const end = moment.utc("2022-05-30");
 
-    const diff = moment.duration(end.diff(now))
+    const diff = moment.duration(endDate.diff(now))
     days.value = diff.days();
     hours.value = diff.hours();
     minutes.value = diff.minutes();

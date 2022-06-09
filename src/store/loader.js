@@ -2,9 +2,9 @@ import { defineStore } from "pinia";
 
 export const useLoaderStore = defineStore("loader", {
   state: () => ({
-    currentVP: 8700,
-    goalVP: 10000,
-    percentLeft: 0.13,
+    currentVP: 24668,
+    goalVP: 30000,
+    percentLeft: 0.15,
     progressLoading: true,
     loading: false,
     error: false,
@@ -15,12 +15,12 @@ export const useLoaderStore = defineStore("loader", {
     double: false,
     cosmosValidator: {},
     junoValidator: {},
+    evmosValidator: {},
     manual: false,
     isFormValid: false,
     errorMessages: "",
-    cosmosDelegation: false,
-    cosmoshubStaked: {},
-    junoStaked: {},
+    evmosDelegation: false,
+    evmosStaked: {},
   }),
   getters: {},
   actions: {},
