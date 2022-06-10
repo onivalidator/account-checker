@@ -2,7 +2,7 @@
     <div>
         <div class="text-body-1">You are eligible for the 100 Evmos giveaway on chain. <br> Make sure to
             respect the other conditions mentionned in the <a target="__blank__"
-            href="https://twitter.com/stakefrites_/status/1526253044723228673">Tweet</a></div>
+            href="https://twitter.com/stakefrites_/status/1535228387769425920">Tweet</a></div>
         <div class="mt-5">
             <v-btn
             target="__blank__"

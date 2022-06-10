@@ -2,7 +2,7 @@
     <div>
         <div class="text-body-1">You are eligible for the 50 Evmos giveaway on chain. <br> Make sure to
             respect the other conditions mentionned in the <a target="__blank__"
-            href="https://twitter.com/stakefrites_/status/1526253044723228673">Tweet</a>
+            href="https://twitter.com/stakefrites_/status/1535228387769425920">Tweet</a>
         </div>
         <div class="text-body-1">Would you like to win 100 EVMOS ?! 🥩 🍟 </div>
         <div class="text-body-1">Delegate more than 50 EVMOS to be eligible. 🥩 🍟 </div>
